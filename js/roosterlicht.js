@@ -3,5 +3,98 @@
 
 jQuery( function() {
 
-	alert( 'hi' );
+
+	// Push notification stuff
+	var pushNotification;
+
+	document.addEventListener( 'deviceready', function() {
+	    pushNotification = window.plugins.pushNotification;
+	});
+
+	// Android register
+	if ( device.platform == 'android' || device.platform == 'Android' ) {
+
+		pushNotification.register(
+			successHandler,
+			errorHandler,
+			{
+				'senderID'	: '149469167081',
+				'ecb'		: 'onNotificationGCM'
+			}
+		);
+	}
+	// iOS register
+	else {
+
+		pushNotification.register(
+			tokenHandler,
+			errorHandler,
+			{
+				'badge'	: 'true',
+				'sound'	: 'true',
+				'alert'	: 'true',
+				'ecb'	: 'onNotificationAPN'
+			}
+		);
+	}
+
+	// Android succesfully registered
+	function successHandler( result ) {
+		alert( 'result: ' + result );
+	}
+
+	// Android + iOS, error while registering
+	function errorHandler( error ) {
+		alert( 'error: ' + error );
+	}
+
+	// iOS getting the push notification
+	function onNotificationAPN( event ) {
+	
+		if ( event.alert ) {
+			navigator.notification.alert( event.alert );
+		}
+
+		if ( event.sound ) {
+			var sound = new Media( event.sound );
+			sound.play();
+		}
+
+		if ( event.badge ) {
+			pushNotification.setApplicationIconBadgeNumber( successHandler, errorHandler, event.badge );
+		}
+	}
+
+	// Android getting the push notification
+	function onNotificationGCM( x ) {
+
+		switch( x.event ) {
+
+			case 'registered':
+			
+				if ( x.regid.length > 0 ) {
+					jQuery( 'body' ).html( x.regid );
+					alert( 'regid: ' + x.regid );
+				}
+			break;
+
+			case 'message':
+				alert( 'message: ' + e.payload.message );
+			break;
+
+			case 'error':
+				alert( 'error: ' + e.msg );
+			break;
+
+			default:
+				alert( 'unknown event' );
+			break;
+		}
+	}
+
+	// iOS token handler
+	function tokenHandler( token ) {
+		alert( 'token: ' + token );
+	}
+
 });
