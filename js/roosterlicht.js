@@ -663,14 +663,14 @@ application.build_interface = function() {
 };
 
 
-if (is_phonegap_app) {
-  document.addEventListener( 'deviceready', function() {
-    alert('device ready');
-    application.initialize();
-  });
-}
-else {
+// if (is_phonegap_app) {
+//   document.addEventListener( 'deviceready', function() {
+//     alert('device ready');
+//     application.initialize();
+//   });
+// }
+// else {
   $(document).ready(function(){
     application.initialize();
   });
-}
+// }
