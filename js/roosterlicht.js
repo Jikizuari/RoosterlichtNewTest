@@ -30,7 +30,7 @@ roosterlicht.errorHandler = function( error ) {
 };
 
 // iOS getting the push notification
-roosterlicht.onNotificationAPN = function( event ) {
+var onNotificationAPN = function( event ) {
 
   if ( event.alert ) {
     navigator.notification.alert( event.alert );
@@ -47,7 +47,7 @@ roosterlicht.onNotificationAPN = function( event ) {
 };
 
 // Android getting the push notification
-roosterlicht.onNotificationGCM = function( x ) {
+var onNotificationGCM = function( x ) {
   alert(x.event);
   alert(x.regid);
   switch( x.event ) {
@@ -100,21 +100,19 @@ roosterlicht.tokenHandler = function( token ) {
 };
 
 roosterlicht.init = function() {
-  alert('roosterlicht.init');
   if (window.hasOwnProperty('plugins') && window.plugins.hasOwnProperty('pushNotification'))
     pushNotification = window.plugins.pushNotification;
   else
     return false;
-  alert('roosterlicht.init2');
+
     // Android register
   if ( device.platform == 'android' || device.platform == 'Android' ) {
-    alert('register');
     pushNotification.register(
       roosterlicht.successHandler,
       roosterlicht.errorHandler,
       {
         'senderID'  : '149469167081',
-        'ecb'   : 'roosterlicht.onNotificationGCM'
+        'ecb'   : 'onNotificationGCM'
       }
     );
   }
@@ -128,7 +126,7 @@ roosterlicht.init = function() {
         'badge' : 'true',
         'sound' : 'true',
         'alert' : 'true',
-        'ecb' : 'roosterlicht.onNotificationAPN'
+        'ecb' : 'onNotificationAPN'
       }
     );
   }
@@ -185,23 +183,10 @@ var android_version = (function () {
   }
 }());
 
-
-var app_is_ready = false;
-document.addEventListener( 'deviceready', function() {
-  alert('device is ready 1');
-  app_is_ready = true;
-});
-
 var application = {
   initialize: function () {
-    if (app_is_ready) {
-      roosterlicht.init();
-    }
-    document.addEventListener( 'deviceready', function() {
-      alert('device is ready 2');
-      app_is_ready = true;
-      roosterlicht.init();
-    });
+    roosterlicht.init();
+    application.build_interface();
   },
 
   /*
@@ -419,8 +404,8 @@ var application = {
 	}
 };
 
-/*********************************************** END FUNCTIONS ***********************************************/
-$( function() {
+
+application.build_interface = function() {
   if( is_phonegap_app ) { // PhoneGap
 
 	/*
@@ -543,7 +528,8 @@ $( function() {
 		$(this).addClass("active");
 		menu_is_open = false;
 		application.close_menu();
-		var needed_hash = $(this).attr("href").substring(1);
+    var needed_hash = $(this).attr("href") || "#0";
+		needed_hash = needed_hash.substring(1);
 		application.get_required_page_info(needed_hash);
 	});
 
@@ -675,4 +661,17 @@ $( function() {
 			}
 		}
 	} );
-});
+};
+
+
+if (is_phonegap_app)
+  document.addEventListener( 'deviceready', function() {
+    $(document).ready(function(){
+      application.initialize();
+    });
+  });
+else
+  $(document).ready(function(){
+    application.initialize();
+  });
+
