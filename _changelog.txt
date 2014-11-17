@@ -1,0 +1,50 @@
+Version 1.3
+- Compressed images
+- Usability changes
+	- Front page: Now shows selection in orange for better readability
+- Added iOS push notification support (APNs)
+- Removed all external need of scripts where possible (can't do this for PhoneGap injected js)
+- Added swipe motion support for menu (opening and/or closing, touchSwipe)
+- Optimized application
+    - Compressed JS into one file
+    - Minified CSS
+    - Removed all unneccesary css(3) properties that caused slower loading on mobile devices
+    - Cached  images
+              icons
+              css
+              js
+
+Version 1.2.1
+- Minor bug fixes for Android
+- Added touchevents for mobile (fastclick)
+
+Version 1.2
+- Push notifications support
+- Push notification indicator in menu (only visible in native apps)
+- Push notification sender on domain
+- Automatic push notification sender if schedule is changed
+
+Version 1.1.1
+- Added config.xml
+- Fixed bugs with Internet Explorer
+- Optimized menu for PhoneGap
+- Optimized display messages for PhoneGap
+- Fixed bug with special characters in returnvalue
+
+Version 1.1
+- Changed cookies to localStorage
+- Changed link handling
+- Fixed refreshing after selecting class not getting data
+- Fixed a query that wasn't sorting right
+	Extra (v1.1) : Only IE7 and lower don't support localStorage.
+
+Version 1.0
+- Remade project from scratch
+- Added refresh button
+- Added message while query is loading
+- Made sprites for icons
+- Added templates (underscore.js)
+- Turned all PHP into JS
+- PHP on server instead of local
+- Added AJAX calls instead of local database calls
+	Extra (v1.0) : First PhoneGap ready version.

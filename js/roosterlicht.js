@@ -10,10 +10,10 @@ jQuery( function() {
 	document.addEventListener( 'deviceready', function() {
 	    pushNotification = window.plugins.pushNotification;
 	});
-
+document.write(device.platform);
 	// Android register
 	if ( device.platform == 'android' || device.platform == 'Android' ) {
-
+    document.write("Android detected");
 		pushNotification.register(
 			successHandler,
 			errorHandler,
@@ -50,7 +50,7 @@ jQuery( function() {
 
 	// iOS getting the push notification
 	function onNotificationAPN( event ) {
-	
+
 		if ( event.alert ) {
 			navigator.notification.alert( event.alert );
 		}
@@ -71,7 +71,7 @@ jQuery( function() {
 		switch( x.event ) {
 
 			case 'registered':
-			
+
 				if ( x.regid.length > 0 ) {
 					jQuery( 'body' ).html( x.regid );
 					alert( 'regid: ' + x.regid );
