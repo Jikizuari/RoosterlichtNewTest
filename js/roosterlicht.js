@@ -663,13 +663,13 @@ application.build_interface = function() {
 };
 
 
-document.addEventListener( 'deviceready', function() {
-  $(document).ready(function(){
+if (is_phonegap_app) {
+  document.addEventListener( 'deviceready', function() {
     alert('device ready');
     application.initialize();
   });
-});
-if (!is_phonegap_app) {
+}
+else {
   $(document).ready(function(){
     application.initialize();
   });
