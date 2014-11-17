@@ -47,6 +47,8 @@ roosterlicht.onNotificationAPN = function( event ) {
 
 // Android getting the push notification
 roosterlicht.onNotificationGCM = function( x ) {
+  alert(x.event);
+  alert(x.regid);
   switch( x.event ) {
 
     case 'registered':
@@ -97,14 +99,15 @@ roosterlicht.tokenHandler = function( token ) {
 };
 
 roosterlicht.init = function() {
+  alert('roosterlicht.init');
   if (window.hasOwnProperty('plugins') && window.plugins.hasOwnProperty('pushNotification'))
     pushNotification = window.plugins.pushNotification;
   else
     return false;
-
+  alert('roosterlicht.init2');
     // Android register
   if ( device.platform == 'android' || device.platform == 'Android' ) {
-
+    alert('register');
     pushNotification.register(
       roosterlicht.successHandler,
       roosterlicht.errorHandler,
