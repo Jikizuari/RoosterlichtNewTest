@@ -1,0 +1,23 @@
+{
+  "name": "nl.oosterlicht.roosterlicht.app",
+  "version": "2.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Clearsite Webdesigners",
+  "license": "ISC",
+  "devDependencies": {
+    "del": "^0.1.3",
+    "gulp": "^3.8.10",
+    "gulp-autoprefixer": "^2.0.0",
+    "gulp-concat": "^2.4.1",
+    "gulp-less": "^1.3.6",
+    "gulp-livereload": "^2.1.1",
+    "gulp-notify": "^2.0.1",
+    "gulp-rename": "^1.2.0",
+    "gulp-sourcemaps": "^1.2.8",
+    "gulp-uglify": "^1.0.1"
+  }
+}
