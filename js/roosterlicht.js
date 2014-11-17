@@ -28,6 +28,13 @@ roosterlicht.errorHandler = function( error ) {
   alert( 'error: ' + error );
 };
 
+roosterlicht._dbm = [];
+roosterlicht._debug = true;
+roosterlicht.debugMessage = function( message ) {
+  if (roosterlicht._debug)
+    roosterlicht._dbm.push(JSON.stringify(message));
+};
+
 // iOS getting the push notification
 roosterlicht.onNotificationAPN = function( event ) {
 
@@ -47,7 +54,7 @@ roosterlicht.onNotificationAPN = function( event ) {
 
 // Android getting the push notification
 roosterlicht.onNotificationGCM = function( x ) {
-
+  roosterlicht.debugMessage(x);
   switch( x.event ) {
 
     case 'registered':
@@ -221,6 +228,15 @@ var application = {
 		front_class   = $('#front-class'),
 		main_content  = $('#main-content'),
 		loading       = $('.loading');
+
+    if ( hash == 6 ) {
+      template_id = "#debug_message";
+      main_content.html("");
+      template = _.template(jQuery(template_id).html());
+      main_content.append(template({data : roosterlicht._dbm }));
+      return true;
+    }
+
 		$.ajax( {
 			url      : "http://www.oosterlicht.nl/mobile_app.ajax.php?callback=?",
 			type     : "GET",
@@ -242,8 +258,8 @@ var application = {
   				template_id = "#back_class_template";
   			if ( hash == 3 )
   				template_id = "#marquee_template";
-  			if ( hash == 4 )
-  				template_id = "#teacher_info_template";
+        if ( hash == 4 )
+          template_id = "#teacher_info_template";
   			if ( hash != 0 ) {
   				main_content.html("");
   				template = _.template(jQuery(template_id).html());
@@ -346,8 +362,10 @@ var application = {
 			application.request_data( needed_hash,  { request : 'klassen',             required : localStorage.getItem('selected_location') } );
 		else if ( needed_hash == 3 )
 			application.request_data( needed_hash,  { request : 'lichtkrant',          required : localStorage.getItem('selected_location') } );
-		else if ( needed_hash == 4 )
-			application.request_data( needed_hash,  { request : 'docenten',            required : localStorage.getItem('selected_location') } );
+    else if ( needed_hash == 4 )
+      application.request_data( needed_hash,  { request : 'docenten',            required : localStorage.getItem('selected_location') } );
+		else if ( needed_hash == 6 )
+			application.request_data( needed_hash,  {} );
 		else if ( needed_hash == 5 ) {
 			$("#main-top-bar-back").fadeIn('fast');
 			application.request_data( 1,            { request : 'roosterwijzigingen',  required : localStorage.getItem('second_selected_class') });
@@ -415,7 +433,9 @@ var application = {
 
 /*********************************************** END FUNCTIONS ***********************************************/
 $( function() {
-
+  if (roosterlicht._debug) {
+    $("#left-navigation").append('<li><a class="menu-icon-two" href="#6" id="all-debug"><span class="menu-span"><span class="icon icon-calendar"></span>Debug</span></a></li>');
+  }
 	if( is_phonegap_app ) { // PhoneGap
 
 	/*
