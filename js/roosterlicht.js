@@ -3,7 +3,6 @@ var is_phonegap_app = (document.URL.indexOf( 'http://' ) === -1 && document.URL.
 // alert(is_phonegap_app ? 'is PhoneGap'  : 'is web');
 
 function onDeviceReady() {
-  alert('device ready');
   application.initialize();
   application.activate_push();
 }
@@ -49,14 +48,11 @@ var onNotificationAPN = function( event ) {
 
 // Android getting the push notification
 var onNotificationGCM = function( x ) {
-  alert(x.event);
-  alert(x.regid);
   switch( x.event ) {
 
     case 'registered':
-      alert('regid: '+ x.regid);
       if ( x.regid.length > 0 ) {
-        // alert('registration id = '+e.regid);
+        // alert('registration id = '+x.regid);
         if( localStorage.getItem('selected_location') !== null && localStorage.getItem('selected_class') !== null ) {
           application.process_notification( {
             push      : 'update',
@@ -71,7 +67,7 @@ var onNotificationGCM = function( x ) {
     break;
 
     case 'message':
-      alert( 'message: ' + x.payload.message );
+      alert( x.payload.message );
     break;
 
     case 'error':
@@ -79,7 +75,7 @@ var onNotificationGCM = function( x ) {
     break;
 
     default:
-      alert( 'unknown event' );
+      // alert( 'unknown event' );
     break;
   }
 };
@@ -153,10 +149,8 @@ var application = {
       return false;
     }
 
-    alert(device.platform);
       // Android register
     if ( device.platform == 'android' || device.platform == 'Android' ) {
-      alert('request push android');
       pushNotification.register(
         application.successHandler,
         application.errorHandler,
@@ -184,12 +178,12 @@ var application = {
 
   // Android succesfully registered
   successHandler: function( result ) {
-    alert( 'result: ' + result );
+    // alert( 'result: ' + result );
   },
 
   // Android + iOS, error while registering
   errorHandler: function( error ) {
-    alert( 'error: ' + error );
+    // alert( 'error: ' + error );
   },
 
   // iOS token handler
