@@ -12,6 +12,282 @@
 </head>
 <body>
 
+	<div id="front-page">
+
+	  <div id="front-banner">
+
+	    <img src="img/logo.png" width="232" height="157" alt="logo" />
+
+	  </div> <!-- #front-banner -->
+
+	  <span class="front-heading front-header-fix">1. Kies je locatie</span>
+	  <ul id="front-locations">
+	    <li>Nieuwegein</li>
+	    <li>Vianen</li>
+	  </ul> <!-- #front-locations -->
+
+	  <div id="front-hidden" class="hide">
+
+	    <div class="loading">
+
+	      <img src="img/ajax-loader.gif" width="16" height="16" alt="loader"> Gegevens ophalen...
+
+	    </div> <!-- .loading -->
+
+	    <span class="front-heading">2. Kies je klas</span>
+
+	    <ul id="front-class">
+
+	      <!-- These will be loaded via AJAX after selecting a location -->
+
+	    </ul> <!-- .front-heading -->
+
+	  </div> <!-- #front-hidden -->
+
+	  <ul>
+	    <li class="go-to-website">
+	      <a class="weblink menu-icon-six">
+	        <span class="menu-span-home"><span class="icon icon-earth"></span>Naar de website</span>
+	      </a>
+	    </li>
+	  </ul>
+
+	</div> <!-- #front-page-->
+
+	<div id="back-page">
+
+	  <div id="navigation">
+
+	    <div id="logo">
+
+	      <img src="img/logo.png" width="160" height="108" alt="logo" />
+
+	    </div> <!-- #logo -->
+
+	    <ul id="left-navigation">
+
+	      <li>
+	        <a class="menu-icon-one" href="#1" id="mij-wij">
+	          <span class="menu-span"><span class="icon icon-user"></span>Mijn wijzigingen</span>
+	        </a>
+	      </li>
+
+	      <li>
+	        <a class="menu-icon-two" href="#2" id="all-wij">
+	          <span class="menu-span"><span class="icon icon-calendar"></span>Alle wijzigingen</span>
+	        </a>
+	      </li>
+
+	      <li>
+	        <a class="menu-icon-three" href="#3" id="lic-kra">
+	          <span class="menu-span"><span class="icon icon-newspaper"></span>Lichtkrant</span>
+	        </a>
+	      </li>
+
+	      <li>
+	        <a class="menu-icon-four" href="#4" id="afk-ler">
+	          <span class="menu-span"><span class="icon icon-users"></span>Afkortingen leraren</span>
+	        </a>
+	      </li>
+
+	      <li id="change-class">
+	        <a class="menu-icon-five">
+	          <span class="menu-span"><span class="icon icon-cog"></span>Klas wijzigen</span>
+	        </a>
+	      </li>
+
+	      <li class="go-to-website">
+	        <a class="menu-icon-six">
+	          <span class="menu-span"><span class="icon icon-earth"></span>Naar website</span>
+	        </a>
+	      </li>
+
+	    </ul> <!-- #left-navigation -->
+
+	    <div class="push-notis">
+
+	      <label for="push123" class="push-noti-label"><span class="icon icon-alarm"></span>Push notificaties</label>
+	      <label id="checkbox-label" class="is-checkbox" for="push123"></label>
+	      <input type="checkbox" name="push-checkbox" class="push-checkbox" value="1" id="push123" />
+
+	    </div> <!-- .push-notis -->
+
+	  </div> <!-- #navigation -->
+
+	    <div id="main-top-bar" class="animateable">
+
+	      <span class="icon icon-menu" id="main-top-bar-show-hide-menu"></span>
+	      <span class="icon icon-spinner" id="main-top-bar-refresh"></span>
+	      <span class="main-top-bar-text">Roosterlicht</span>
+	      <span class="icon icon-arrow-left hide" id="main-top-bar-back"></span>
+	      <a id="main-top-bar-telephone" href="tel:030-600%2048%2000"><span class="icon icon-phone"></span></a>
+
+	    </div> <!-- #main-top-bar -->
+
+	  <div id="main-section" class="animateable">
+
+	      <div class="loading">
+
+	        <img src="img/ajax-loader.gif" width="16" height="16" alt="loader"> Gegevens ophalen...
+
+	      </div> <!-- .loading -->
+
+	      <div id="main-content">
+
+	        <!-- This will be loaded dynamically with AJAX requests -->
+
+	      </div> <!-- .main-content -->
+
+	  </div> <!-- #main-section -->
+
+	</div> <!-- #back-page -->
+
+	<!-- Templates -->
+
+	<!-- Front page : class selection -->
+	<script type="text/template" id="front_class_template">
+	    <% for (var i in data) { %>
+	      <li><%= data[i].klas %></li>
+	    <% } %>
+	</script>
+
+	<!-- Back page : schedule change -->
+	<script type="text/template" id="schedule_changes_template">
+	<% var prev_sched_date  = ''; %>
+	  <table class="main-table">
+	    <% if ( data.length > 0 ) { %>
+	      <tr class='main-table-top'>
+	        <td>Lesuur</td>
+	        <td>Vak</td>
+	        <td>Leraar</td>
+	        <td>Wijziging</td>
+	      </tr>
+
+	      <% for (var i in data) { %>
+
+	        <% if(prev_sched_date != data[i].datum) {
+	          sched_date_parts = data[i].datum.replace(/[\/\-:]/g, ' ').split(' ');
+	          date_object = new Date(parseInt(sched_date_parts[0], 10), parseInt(sched_date_parts[1], 10)-1, parseInt(sched_date_parts[2], 10), parseInt(sched_date_parts[3], 10), parseInt(sched_date_parts[4], 10), parseInt(sched_date_parts[5], 10), 0);
+	        %>
+	          <tr class='main-table-header'>
+	            <td colspan='4'><%= data[i].klas %> - <%= application.translate_date(date_object) %></td>
+	          </tr>
+	        <%
+	          prev_sched_date = data[i].datum;
+	        }
+	        %>
+
+	        <tr class="main-table-data">
+	          <td><%= data[i].uren %></td>
+	          <td><%= data[i].vak %></td>
+	          <td><%= data[i].docent %></td>
+	          <td><%= data[i].wijzigingen %></td>
+	        </tr>
+
+	      <% }
+	      } else { %>
+	      <tr class='main-table-header no-results'>
+	        <td colspan='4'><strong>Geen roosterwijzigingen gevonden</strong></td>
+	      </tr>
+	    <% } %>
+	  </table>
+	</script>
+
+	<!-- Back page : class selection -->
+	<script type="text/template" id="back_class_template">
+	  <table class="main-table">
+	  <% if ( data.length > 0 ) { %>
+	    <tr class='main-table-header'>
+	      <td>Kies je klas</td>
+	    </tr>
+	    <% for (var i in data) { %>
+	      <tr class="main-table-data left-align">
+	        <td class="main-table-td-hoverable"><%= data[i].klas %></td>
+	      </tr>
+	    <% }
+	    } else { %>
+	      <tr class='main-table-header no-results'>
+	        <td colspan='4'><strong>Geen klassen gevonden</strong></td>
+	      </tr>
+	    <% } %>
+	  </table>
+	</script>
+
+	<!-- Back page : marquee data -->
+	<script type="text/template" id="marquee_template">
+	<% var date_today  = new Date(); %>
+	  <table class="main-table">
+	  <% if ( data.length > 0 ) { %>
+	    <tr class='main-table-header'>
+	      <td>Lichtkrant - <%= application.translate_date(date_today) %></td>
+	    </tr>
+	      <% for (var i in data) { %>
+	        <tr class="main-table-data left-align">
+	          <td>
+	            <p><%= data[i].title %></p>
+	            <p><%= data[i].body %></p>
+	          </td>
+	        </tr>
+	      <% } %>
+	    <% } else { %>
+	      <tr class='main-table-header no-results'>
+	        <td><strong>Geen berichten gevonden</strong></td>
+	      </tr>
+	    <% } %>
+	  </table>
+	</script>
+
+	<!-- Back page : teacher info -->
+	<script type="text/template" id="teacher_info_template">
+	<% var prev_function  = 'Leraar'; %>
+	  <table class="main-table">
+	    <% if ( data.length > 0 ) { %>
+	      <tr class='main-table-header'><td> Leraren </td></tr>
+	      <% for (var i in data) { %>
+
+	        <% if( prev_function != data[i].functie ) { %>
+	          <tr class='main-table-header left-align'>
+	            <td> Opvangkrachten </td>
+	          </tr>
+	        <%
+	          prev_function = data[i].functie;
+	        }
+	        %>
+
+	        <tr class="main-table-data left-align">
+	          <td><strong><%= data[i].code %></strong> <%= data[i].naam_volledig %></td>
+	        </tr>
+
+	      <% } %>
+
+	    <% } else { %>
+	      <tr class='main-table-header no-results'>
+	        <td colspan='4'><strong>Geen docenten gevonden</td>
+	      </tr>
+	    <% } %>
+	  </table>
+	</script>
+
+	<!-- Javascript -->
+	<script type="text/javascript" src="js/underscore-min.js"></script>
+	<script type="text/javascript" src="js/roosterlicht.js"></script>
+
+	<!-- Scripts used for PhoneGap ( injected at build ) -->
+	<script>
+	  if (is_phonegap_app) {
+	    var pushnotificationscript=document.createElement('SCRIPT');
+	        pushnotificationscript.type='text/javascript';
+	        pushnotificationscript.src='PushNotification.js';
+	    
+	    document.getElementsByTagName('head')[0].appendChild(pushnotificationscript);
+	    
+	    var phonegapscript=document.createElement('SCRIPT');
+	        phonegapscript.type='text/javascript';
+	        phonegapscript.src='phonegap.js';
+	    
+	    document.getElementsByTagName('head')[0].appendChild(phonegapscript);
+	  }
+	</script>
 	<script src="phonegap.js"></script>
 	<script type="text/javascript" charset="utf-8" src="PushNotification.js"></script>
 	<script type="text/javascript" src="js/roosterlicht.js"></script>
