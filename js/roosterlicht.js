@@ -126,13 +126,17 @@ var android_version = (function () {
 var application = {
   initialize: function () {
     application.build_interface();
+    application.activate_push();
   },
 
   activate_push: function() {
     if (window.hasOwnProperty('plugins') && window.plugins.hasOwnProperty('pushNotification'))
       pushNotification = window.plugins.pushNotification;
-    else
+    else {
+      alert('plugin not found');
       return false;
+    }
+
     alert(device.platform);
       // Android register
     if ( device.platform == 'android' || device.platform == 'Android' ) {
@@ -406,11 +410,6 @@ var application = {
 
 application.build_interface = function() {
   if( is_phonegap_app ) { // PhoneGap
-
-	/*
-		FUNC : Initializing the application (PhoneGap only)
-		*/
-		application.activate_push();
 
 	/*
 		FUNC : Setting the user agent string (PhoneGap only)
