@@ -124,16 +124,20 @@ var android_version = (function () {
 }());
 
 var application = {
+  _done: false,
+
   initialize: function () {
+    if (application._done)
+      return;
+    application._done = true;
     application.build_interface();
-    application.activate_push();
   },
 
   activate_push: function() {
-    if (window.hasOwnProperty('plugins') && window.plugins.hasOwnProperty('pushNotification'))
+    if (window.hasOwnProperty('plugins') && window.plugins.hasOwnProperty('pushNotification')) {
       pushNotification = window.plugins.pushNotification;
+    }
     else {
-      alert('plugin not found');
       return false;
     }
 
@@ -662,14 +666,13 @@ application.build_interface = function() {
 };
 
 
-// if (is_phonegap_app) {
-//   document.addEventListener( 'deviceready', function() {
-//     alert('device ready');
-//     application.initialize();
-//   });
-// }
-// else {
+  document.addEventListener( 'deviceready', function() {
+    alert('device ready');
+    application.initialize();
+    application.activate_push();
+  });
+
   $(document).ready(function(){
     application.initialize();
   });
-// }
+
