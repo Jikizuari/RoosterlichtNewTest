@@ -240,24 +240,6 @@ prev_sched_date = data[i].datum;
 </table>
 </script>
 
-<!-- Back page : de bug -->
-<script type="text/template" id="debug_message">
-<table class="main-table">
-<% if ( data.length > 0 ) { %>
-  <tr class='main-table-header'>
-    <td>Debug</td>
-  </tr>
-  <% for (var i in data) { %>
-  <tr class="main-table-data left-align">
-    <td>
-      <p><%= data[i] %></p>
-    </td>
-  </tr>
-  <% } %>
-<% } %>
-</table>
-</script>
-
 <!-- Back page : teacher info -->
 <script type="text/template" id="teacher_info_template">
 <% var prev_function  = 'Leraar'; %>

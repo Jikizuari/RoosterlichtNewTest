@@ -28,13 +28,6 @@ roosterlicht.errorHandler = function( error ) {
   alert( 'error: ' + error );
 };
 
-roosterlicht._dbm = [];
-roosterlicht._debug = true;
-roosterlicht.debugMessage = function( message ) {
-  if (roosterlicht._debug)
-    roosterlicht._dbm.push(JSON.stringify(message));
-};
-
 // iOS getting the push notification
 roosterlicht.onNotificationAPN = function( event ) {
 
@@ -54,11 +47,10 @@ roosterlicht.onNotificationAPN = function( event ) {
 
 // Android getting the push notification
 roosterlicht.onNotificationGCM = function( x ) {
-  roosterlicht.debugMessage(x);
   switch( x.event ) {
 
     case 'registered':
-
+      alert('regid: '+ x.regid);
       if ( x.regid.length > 0 ) {
         // alert('registration id = '+e.regid);
         if( localStorage.getItem('selected_location') !== null && localStorage.getItem('selected_class') !== null ) {
@@ -229,14 +221,6 @@ var application = {
 		main_content  = $('#main-content'),
 		loading       = $('.loading');
 
-    if ( hash == 6 ) {
-      template_id = "#debug_message";
-      main_content.html("");
-      template = _.template(jQuery(template_id).html());
-      main_content.append(template({data : roosterlicht._dbm }));
-      return true;
-    }
-
 		$.ajax( {
 			url      : "http://www.oosterlicht.nl/mobile_app.ajax.php?callback=?",
 			type     : "GET",
@@ -364,8 +348,6 @@ var application = {
 			application.request_data( needed_hash,  { request : 'lichtkrant',          required : localStorage.getItem('selected_location') } );
     else if ( needed_hash == 4 )
       application.request_data( needed_hash,  { request : 'docenten',            required : localStorage.getItem('selected_location') } );
-		else if ( needed_hash == 6 )
-			application.request_data( needed_hash,  {} );
 		else if ( needed_hash == 5 ) {
 			$("#main-top-bar-back").fadeIn('fast');
 			application.request_data( 1,            { request : 'roosterwijzigingen',  required : localStorage.getItem('second_selected_class') });
@@ -433,10 +415,7 @@ var application = {
 
 /*********************************************** END FUNCTIONS ***********************************************/
 $( function() {
-  if (roosterlicht._debug) {
-    $("#left-navigation").append('<li><a class="menu-icon-two" href="#6" id="all-debug"><span class="menu-span"><span class="icon icon-calendar"></span>Debug</span></a></li>');
-  }
-	if( is_phonegap_app ) { // PhoneGap
+  if( is_phonegap_app ) { // PhoneGap
 
 	/*
 		FUNC : Initializing the application (PhoneGap only)
