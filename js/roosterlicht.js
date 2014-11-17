@@ -345,7 +345,7 @@ var application = {
 	*/
 	get_required_page_info: function(needed_hash) {
 		if ( needed_hash == 1 )
-			application.request_data( needed_hash,  { request : 'roosterwijzigingen',  required : [ localStorage.getItem('selected_class'), localStorage.getItem( 'selected_location' ) ] } );
+			application.request_data( needed_hash,  { request : 'roosterwijzigingen',  required : localStorage.getItem('selected_class'), location: localStorage.getItem( 'selected_location' ) } );
 		else if ( needed_hash == 2 )
 			application.request_data( needed_hash,  { request : 'klassen',             required : localStorage.getItem('selected_location') } );
 		else if ( needed_hash == 3 )
