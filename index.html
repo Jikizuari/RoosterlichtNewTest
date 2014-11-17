@@ -3,12 +3,13 @@
 <head>
 	<title>Roosterlicht</title>
 
-	<meta http-equiv="content-type" content="text/html">
+	<meta http-equiv="content-type" content="text/html;charset=UTF-8">
 	<meta id="extViewportMeta" name="viewport" content="width=device-width, user-scalable=no">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
 
 	<link rel="stylesheet" type="text/css" href="css/style.css">
+  <script src="js/lib/jquery-1.9.1-min.js"></script>
   <script src="phonegap.js"></script>
 </head>
 <body>
@@ -147,128 +148,128 @@
 	<!-- Templates -->
 
 	<!-- Front page : class selection -->
-	<script type="text/template" id="front_class_template">
-	    <% for (var i in data) { %>
-	      <li><%= data[i].klas %></li>
-	    <% } %>
-	</script>
+  <script type="text/template" id="front_class_template">
+    <% for (var i in data) { %>
+      <li><%= data[i].klas %></li>
+    <% } %>
+  </script>
 
 	<!-- Back page : schedule change -->
-	<script type="text/template" id="schedule_changes_template">
-	<% var prev_sched_date  = ''; %>
-	  <table class="main-table">
-	    <% if ( data.length > 0 ) { %>
-	      <tr class='main-table-top'>
-	        <td>Lesuur</td>
-	        <td>Vak</td>
-	        <td>Leraar</td>
-	        <td>Wijziging</td>
-	      </tr>
+<script type="text/template" id="schedule_changes_template">
+<% var prev_sched_date  = ''; %>
+<table class="main-table">
+<% if ( data.length > 0 ) { %>
+<tr class='main-table-top'>
+<td>Lesuur</td>
+<td>Vak</td>
+<td>Leraar</td>
+<td>Wijziging</td>
+</tr>
 
-	      <% for (var i in data) { %>
+<% for (var i in data) { %>
 
-	        <% if(prev_sched_date != data[i].datum) {
-	          sched_date_parts = data[i].datum.replace(/[\/\-:]/g, ' ').split(' ');
-	          date_object = new Date(parseInt(sched_date_parts[0], 10), parseInt(sched_date_parts[1], 10)-1, parseInt(sched_date_parts[2], 10), parseInt(sched_date_parts[3], 10), parseInt(sched_date_parts[4], 10), parseInt(sched_date_parts[5], 10), 0);
-	        %>
-	          <tr class='main-table-header'>
-	            <td colspan='4'><%= data[i].klas %> - <%= application.translate_date(date_object) %></td>
-	          </tr>
-	        <%
-	          prev_sched_date = data[i].datum;
-	        }
-	        %>
+<% if(prev_sched_date != data[i].datum) {
+sched_date_parts = data[i].datum.replace(/[\/\-:]/g, ' ').split(' ');
+date_object = new Date(parseInt(sched_date_parts[0], 10), parseInt(sched_date_parts[1], 10)-1, parseInt(sched_date_parts[2], 10), parseInt(sched_date_parts[3], 10), parseInt(sched_date_parts[4], 10), parseInt(sched_date_parts[5], 10), 0);
+%>
+<tr class='main-table-header'>
+<td colspan='4'><%= data[i].klas %> - <%= application.translate_date(date_object) %></td>
+</tr>
+<%
+prev_sched_date = data[i].datum;
+}
+%>
 
-	        <tr class="main-table-data">
-	          <td><%= data[i].uren %></td>
-	          <td><%= data[i].vak %></td>
-	          <td><%= data[i].docent %></td>
-	          <td><%= data[i].wijzigingen %></td>
-	        </tr>
+<tr class="main-table-data">
+<td><%= data[i].uren %></td>
+<td><%= data[i].vak %></td>
+<td><%= data[i].docent %></td>
+<td><%= data[i].wijzigingen %></td>
+</tr>
 
-	      <% }
-	      } else { %>
-	      <tr class='main-table-header no-results'>
-	        <td colspan='4'><strong>Geen roosterwijzigingen gevonden</strong></td>
-	      </tr>
-	    <% } %>
-	  </table>
-	</script>
+<% }
+} else { %>
+<tr class='main-table-header no-results'>
+<td colspan='4'><strong>Geen roosterwijzigingen gevonden</strong></td>
+</tr>
+<% } %>
+</table>
+</script>
 
-	<!-- Back page : class selection -->
-	<script type="text/template" id="back_class_template">
-	  <table class="main-table">
-	  <% if ( data.length > 0 ) { %>
-	    <tr class='main-table-header'>
-	      <td>Kies je klas</td>
-	    </tr>
-	    <% for (var i in data) { %>
-	      <tr class="main-table-data left-align">
-	        <td class="main-table-td-hoverable"><%= data[i].klas %></td>
-	      </tr>
-	    <% }
-	    } else { %>
-	      <tr class='main-table-header no-results'>
-	        <td colspan='4'><strong>Geen klassen gevonden</strong></td>
-	      </tr>
-	    <% } %>
-	  </table>
-	</script>
+<!-- Back page : class selection -->
+<script type="text/template" id="back_class_template">
+<table class="main-table">
+<% if ( data.length > 0 ) { %>
+<tr class='main-table-header'>
+<td>Kies je klas</td>
+</tr>
+<% for (var i in data) { %>
+<tr class="main-table-data left-align">
+<td class="main-table-td-hoverable"><%= data[i].klas %></td>
+</tr>
+<% }
+} else { %>
+<tr class='main-table-header no-results'>
+<td colspan='4'><strong>Geen klassen gevonden</strong></td>
+</tr>
+<% } %>
+</table>
+</script>
 
-	<!-- Back page : marquee data -->
-	<script type="text/template" id="marquee_template">
-	<% var date_today  = new Date(); %>
-	  <table class="main-table">
-	  <% if ( data.length > 0 ) { %>
-	    <tr class='main-table-header'>
-	      <td>Lichtkrant - <%= application.translate_date(date_today) %></td>
-	    </tr>
-	      <% for (var i in data) { %>
-	        <tr class="main-table-data left-align">
-	          <td>
-	            <p><%= data[i].title %></p>
-	            <p><%= data[i].body %></p>
-	          </td>
-	        </tr>
-	      <% } %>
-	    <% } else { %>
-	      <tr class='main-table-header no-results'>
-	        <td><strong>Geen berichten gevonden</strong></td>
-	      </tr>
-	    <% } %>
-	  </table>
-	</script>
+<!-- Back page : marquee data -->
+<script type="text/template" id="marquee_template">
+<% var date_today  = new Date(); %>
+<table class="main-table">
+<% if ( data.length > 0 ) { %>
+<tr class='main-table-header'>
+<td>Lichtkrant - <%= application.translate_date(date_today) %></td>
+</tr>
+<% for (var i in data) { %>
+<tr class="main-table-data left-align">
+<td>
+<p><%= data[i].title %></p>
+<p><%= data[i].body %></p>
+</td>
+</tr>
+<% } %>
+<% } else { %>
+<tr class='main-table-header no-results'>
+<td><strong>Geen berichten gevonden</strong></td>
+</tr>
+<% } %>
+</table>
+</script>
 
-	<!-- Back page : teacher info -->
-	<script type="text/template" id="teacher_info_template">
-	<% var prev_function  = 'Leraar'; %>
-	  <table class="main-table">
-	    <% if ( data.length > 0 ) { %>
-	      <tr class='main-table-header'><td> Leraren </td></tr>
-	      <% for (var i in data) { %>
+<!-- Back page : teacher info -->
+<script type="text/template" id="teacher_info_template">
+<% var prev_function  = 'Leraar'; %>
+<table class="main-table">
+<% if ( data.length > 0 ) { %>
+<tr class='main-table-header'><td> Leraren </td></tr>
+<% for (var i in data) { %>
 
-	        <% if( prev_function != data[i].functie ) { %>
-	          <tr class='main-table-header left-align'>
-	            <td> Opvangkrachten </td>
-	          </tr>
-	        <%
-	          prev_function = data[i].functie;
-	        }
-	        %>
+<% if( prev_function != data[i].functie ) { %>
+<tr class='main-table-header left-align'>
+<td> Opvangkrachten </td>
+</tr>
+<%
+prev_function = data[i].functie;
+}
+%>
 
-	        <tr class="main-table-data left-align">
-	          <td><strong><%= data[i].code %></strong> <%= data[i].naam_volledig %></td>
-	        </tr>
+<tr class="main-table-data left-align">
+<td><strong><%= data[i].code %></strong> <%= data[i].naam_volledig %></td>
+</tr>
 
-	      <% } %>
+<% } %>
 
-	    <% } else { %>
-	      <tr class='main-table-header no-results'>
-	        <td colspan='4'><strong>Geen docenten gevonden</td>
-	      </tr>
-	    <% } %>
-	  </table>
-	</script>
+<% } else { %>
+<tr class='main-table-header no-results'>
+<td colspan='4'><strong>Geen docenten gevonden</td>
+</tr>
+<% } %>
+</table>
+</script>
 
 	<!-- Javascript -->
 	<script type="text/javascript" src="js/roosterlicht.js"></script>
