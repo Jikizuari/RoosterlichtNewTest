@@ -104,9 +104,10 @@ roosterlicht.init = function() {
     pushNotification = window.plugins.pushNotification;
   else
     return false;
-
+  alert(device.platform);
     // Android register
   if ( device.platform == 'android' || device.platform == 'Android' ) {
+    alert('request push android');
     pushNotification.register(
       roosterlicht.successHandler,
       roosterlicht.errorHandler,
@@ -185,7 +186,9 @@ var android_version = (function () {
 
 var application = {
   initialize: function () {
+    alert('going init');
     roosterlicht.init();
+    alert('building interface');
     application.build_interface();
   },
 
@@ -664,14 +667,13 @@ application.build_interface = function() {
 };
 
 
-if (is_phonegap_app)
-  document.addEventListener( 'deviceready', function() {
-    $(document).ready(function(){
-      application.initialize();
-    });
-  });
-else
+document.addEventListener( 'deviceready', function() {
   $(document).ready(function(){
     application.initialize();
   });
-
+});
+if (!is_phonegap_app) {
+  $(document).ready(function(){
+    application.initialize();
+  });
+}
